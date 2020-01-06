@@ -21,4 +21,15 @@ public class UserService {
         user.setId(userId);
         return user;
     }
+
+    public boolean checkUserPassword(String userName, String password) {
+        User user = userDao.queryUserByUserName(userName);
+        if (user == null) {
+            return false;
+        }
+        if (!user.getPassword().equals(password)) {
+            return false;
+        }
+        return true;
+    }
 }

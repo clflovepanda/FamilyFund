@@ -11,6 +11,15 @@
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
     <context:property-placeholder ignore-unresolvable="true" location="classpath:config/database.properties"/>
+
+    <mvc:interceptors>
+        <!-- 日志拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/family/**" />
+            <bean class="com.panda.family.filter.LoginFilter" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <!--驱动类名 -->
         <property name="driverClass" value="${db.driver}" />
@@ -59,5 +68,6 @@
         <!-- 指定要自动扫描接口的基础包，实现接口 -->
         <property name="basePackage" value="com.panda.family.dao"></property>
     </bean>
+
 
 </beans>

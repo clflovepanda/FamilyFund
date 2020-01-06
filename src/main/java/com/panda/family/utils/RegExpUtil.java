@@ -31,12 +31,14 @@ public class RegExpUtil {
     }
 
     public static boolean isPassword(String str) {
+        if (str == null) return false;
         String regex = "[A-Za-z0-9]{6,18}";
         return match(regex, str);
     }
 
     public static boolean isUserName(String str) {
-        String regex = "[A-Za-z0-9]{6,18}";
+        if (str == null) return false;
+        String regex = "[A-Za-z0-9]{4,18}";
         return match(regex, str);
     }
     /**

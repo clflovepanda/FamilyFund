@@ -85,7 +85,12 @@
                     userName: this.userName,
                     password: this.password
                 }).then(function (value) {
-                    console.log(value);
+                    var result = value.data;
+                    if (result.status == 1) {
+                        location.href = "/";
+                    } else {
+                        alert(result.msg);
+                    }
                 });
             },
             register: function () {

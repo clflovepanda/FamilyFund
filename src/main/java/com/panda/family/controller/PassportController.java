@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,11 +24,30 @@ public class PassportController extends BaseController{
     UserService userService;
 
     @RequestMapping(path = "/doLogin", method = RequestMethod.POST)
-    public void login(@RequestParam("userName") String userName,
-                      @RequestParam("password") String password,
+    public void login(@RequestBody User user,
                       HttpServletRequest request,
-                      HttpServletResponse response) {
+                      HttpServletResponse response) throws IOException {
 
+        if (!RegExpUtil.isUserName(user.getUserName())) {
+            writeJson(response, ResultStatusEnum.FAILED, "用户名或密码不正确", null);
+            return;
+        }
+        if (!RegExpUtil.isPassword(user.getPassword())) {
+            writeJson(response, ResultStatusEnum.FAILED, "用户名或密码不正确", null);
+            return;
+        }
+        boolean result = userService.checkUserPassword(user.getUserName(), user.getPassword());
+        if (result) {
+            Cookie cookie = new Cookie("userName", user.getUserName());
+            cookie.setPath("/");
+            cookie.setMaxAge(86400 * 7);
+            response.addCookie(cookie);
+            writeJson(response, ResultStatusEnum.SUCCESS, "登录成功", null);
+            return;
+        } else {
+            writeJson(response, ResultStatusEnum.FAILED, "用户名或密码不正确", null);
+            return;
+        }
     }
 
     @RequestMapping(path = "/doRegister", method = RequestMethod.POST)
@@ -43,11 +63,11 @@ public class PassportController extends BaseController{
         user.setCode(0);
         user.setCodeTime(0);
 
-        if (RegExpUtil.isUserName(user.getUserName())) {
-            writeJson(response, ResultStatusEnum.FAILED, "用户名长度为6-18位，字母或数字组成", null);
+        if (!RegExpUtil.isUserName(user.getUserName())) {
+            writeJson(response, ResultStatusEnum.FAILED, "用户名长度为4-18位，字母或数字组成", null);
             return;
         }
-        if (RegExpUtil.isPassword(user.getPassword())) {
+        if (!RegExpUtil.isPassword(user.getPassword())) {
             writeJson(response, ResultStatusEnum.FAILED, "密码长度为6-18位，字母或数字组成", null);
             return;
         }
