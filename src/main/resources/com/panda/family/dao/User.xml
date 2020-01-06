@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.panda.family.dao.UserDao">
+
+    <!--<select id="search" resultType="com.panda.family.domain.Family">-->
+        <!--select * from ziwei_msg where `year` = #{year} and `month` = #{month} and `day` = #{day} and `hour` = #{hour} and `sex` = #{sex};-->
+    <!--</select>-->
+
+    <insert id="insertUser" parameterType="com.panda.family.domain.User" useGeneratedKeys="true" keyProperty="id">
+        insert into `fund_user` (`user_name`, `nickname`, `password`, `income`, `real_income`, `email`, `status`, `code`, `code_time`, `ctime`, `utime`)
+        values(#{userName}, #{nickname}, #{password}, #{income}, #{realIncome}, #{email}, #{status}, #{code}, #{codeTime}, #{ctime}, #{utime});
+    </insert>
+
+    <select id="queryUserById" parameterType="java.lang.Long" resultType="com.panda.family.domain.User">
+        select * from `fund_user` where id = #{id};
+    </select>
+
+    <select id="queryUserByUserName" parameterType="java.lang.String" resultType="com.panda.family.domain.User">
+        select * from `fund_user` where user_name = #{userName};
+    </select>
+</mapper>
