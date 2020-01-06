@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>家庭收入预算系统-注册</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="24">
+            <div class="grid-content bg-purple-dark" style="text-align: center; background-color: #409EFF; color: white; font-size: 36px; padding: 10px 0px 10px 0px">
+                家庭收入预算系统
+            </div>
+        </el-col>
+    </el-row>
+    <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+        <el-col :span="6" :offset="6">
+            <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                用户名(用于登录)：
+            </div>
+        </el-col>
+        <el-col :span="6" >
+            <el-input v-model="userName" placeholder="请输入用户名"></el-input>
+        </el-col>
+    </el-row>
+    <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+        <el-col :span="6" :offset="6">
+            <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                昵称：
+            </div>
+        </el-col>
+        <el-col :span="6" >
+            <el-input v-model="nickname" placeholder="请输入昵称"></el-input>
+        </el-col>
+    </el-row>
+    <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+        <el-col :span="6" :offset="6">
+            <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                密码：
+            </div>
+        </el-col>
+        <el-col :span="6" >
+            <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
+        </el-col>
+    </el-row>
+    <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+        <el-col :span="6" :offset="6">
+            <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                重复密码：
+            </div>
+        </el-col>
+        <el-col :span="6" >
+            <el-input placeholder="请输入密码" v-model="repeat" show-password></el-input>
+        </el-col>
+    </el-row>
+    <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+        <el-col :span="6" :offset="6">
+            <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                邮箱：
+            </div>
+        </el-col>
+        <el-col :span="6" >
+            <el-input placeholder="请输入邮箱" v-model="email" show-password></el-input>
+        </el-col>
+    </el-row>
+    <el-row style="padding: 20px 0px 20px 0px;">
+        <el-col :span="6" :offset="9">
+            <div style="text-align: center">
+                <el-button type="primary" style="width: 100%" @click="register">立即注册</el-button>
+            </div>
+        </el-col>
+    </el-row>
+    <el-row style="padding: 20px 0px 20px 0px;">
+        <el-col :span="3" :offset="9">
+            <div style="text-align: center">
+                <el-link type="primary" @click="login">返回登录</el-link>
+            </div>
+        </el-col>
+        <el-col :span="3">
+            <div style="text-align: center">
+                <el-link type="primary" @click="forget">忘记密码</el-link>
+            </div>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script>
+    var k = new Vue({
+        el: '#app',
+        data: {
+            userName: null,
+            nickname: null,
+            password: null,
+            repeat: null,
+            email: null
+        },
+        methods: {
+            register: function () {
+                if (this.userName == null || this.userName == "") {
+                    alert("用户名不能为空");
+                    return;
+                }
+                if (this.nickname == null || this.nickname == "") {
+                    alert("昵称不能为空");
+                    return;
+                }
+                if (this.password == null || this.password == "") {
+                    alert("密码不能为空");
+                    return;
+                }
+                if (this.password != this.repeat) {
+                    alert("两次输入的密码不一致");
+                    return;
+                }
+                if(this.email == null || this.email == "") {
+                    alert("邮箱不能为空");
+                    return;
+                }
+                axios.post("/doRegister", {
+                    userName: this.userName,
+                    nickname: this.nickname,
+                    password: this.password,
+                    email: this.email
+                }).then(function (value) {
+                    var result = value.data;
+                    alert(result.msg);
+                    if (result.status == 1) {
+                        location.href = "/login.html";
+                    }
+                });
+            },
+            login: function () {
+                location.href = "/login.html";
+            },
+            forget: function () {
+                location.href = "/forgetPassword.html";
+            }
+        }
+    });
+</script>
+</html>

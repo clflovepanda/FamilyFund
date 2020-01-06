@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.panda.family.dao.FamilyDao">
+
+    <!--<select id="search" resultType="com.panda.family.domain.Family">-->
+        <!--select * from ziwei_msg where `year` = #{year} and `month` = #{month} and `day` = #{day} and `hour` = #{hour} and `sex` = #{sex};-->
+    <!--</select>-->
+</mapper>

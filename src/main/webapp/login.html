@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>家庭预算系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <el-row>
+            <el-col :span="24">
+                <div class="grid-content bg-purple-dark" style="text-align: center; background-color: #409EFF; color: white; font-size: 36px; padding: 10px 0px 10px 0px">
+                    家庭收入预算系统
+                </div>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6" :offset="6">
+                <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                    用户名：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <el-input v-model="userName" placeholder="请输入用户名"></el-input>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6" :offset="6">
+                <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                    密码：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
+            </el-col>
+        </el-row>
+        <el-row style="padding: 20px 0px 20px 0px;">
+            <el-col :span="6" :offset="9">
+                <div style="text-align: center">
+                    <el-button type="primary" style="width: 100%" @click="login">立即登录</el-button>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row style="padding: 20px 0px 20px 0px;">
+            <el-col :span="3" :offset="9">
+                <div style="text-align: center">
+                    <el-link type="primary" @click="register">立即注册</el-link>
+                </div>
+            </el-col>
+            <el-col :span="3">
+                <div style="text-align: center">
+                    <el-link type="primary" @click="forget">忘记密码</el-link>
+                </div>
+            </el-col>
+        </el-row>
+    </div>
+</body>
+<script>
+    var k = new Vue({
+        el: '#app',
+        data: {
+            userName: null,
+            password: null
+        },
+        methods: {
+            login: function () {
+                if (this.userName == null || this.userName == "") {
+                    alert("用户名不能为空");
+                    return;
+                }
+                if (this.password == null || this.password == "") {
+                    alert("密码不能为空");
+                    return;
+                }
+                axios.post("/doLogin", {
+                    userName: this.userName,
+                    password: this.password
+                }).then(function (value) {
+                    console.log(value);
+                });
+            },
+            register: function () {
+                location.href = "/register.html";
+            },
+            forget: function () {
+                location.href = "/forgetPassword.html";
+            }
+        }
+    });
+</script>
+</html>
