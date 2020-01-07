@@ -35,20 +35,20 @@
             <el-aside width="200px">
                 <el-row class="tac">
                     <el-col :span="24">
-                        <el-menu>
-                            <el-menu-item index="1" :class="{'is-active': editPage == 0}" @click="pageIndex=0">
+                        <el-menu default-active="0">
+                            <el-menu-item index="0" @click="pageIndex=0">
                                 <i class="el-icon-data-analysis"></i>
                                 <span slot="title" >Dashboard</span>
                             </el-menu-item>
-                            <el-menu-item index="2" :class="{'is-active': editPage == 1}" @click="pageIndex=1">
+                            <el-menu-item index="1" @click="pageIndex=1">
                                 <i class="el-icon-house"></i>
                                 <span slot="title">家庭设置</span>
                             </el-menu-item>
-                            <el-menu-item index="3" :class="{'is-active': editPage == 2}" @click="pageIndex=2">
+                            <el-menu-item index="2" @click="pageIndex=2">
                                 <i class="el-icon-user"></i>
                                 <span slot="title">个人设置</span>
                             </el-menu-item>
-                            <el-menu-item index="4" :class="{'is-active': editPage == 3}" @click="pageIndex=3">
+                            <el-menu-item index="3" @click="pageIndex=3">
                                 <i class="el-icon-setting"></i>
                                 <span slot="title">系统设置</span>
                             </el-menu-item>
@@ -85,7 +85,7 @@
                 console.log(key, keyPath);
             },
             jumpPage: function (index) {
-                this.pageIndex = index;
+                location.href="/";
             }
         }
     });

@@ -32,6 +32,7 @@ public class LoginFilter extends HandlerInterceptorAdapter {
             response.sendRedirect("/login.html");
             return false;
         }
+        ThreadLocalUtil.setUser(user);
         return true;
     }
 

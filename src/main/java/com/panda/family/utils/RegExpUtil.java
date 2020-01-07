@@ -41,6 +41,11 @@ public class RegExpUtil {
         String regex = "[A-Za-z0-9]{4,18}";
         return match(regex, str);
     }
+    public static boolean isFamilyName(String str) {
+        if (str == null) return false;
+        String regex = "[A-Za-z0-9]{4,18}";
+        return match(regex, str);
+    }
     /**
      * 验证输入密码长度 (6-18位)
      * @return 如果是符合格式的字符串,返回 <b>true </b>,否则为 <b>false </b>

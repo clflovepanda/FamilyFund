@@ -114,4 +114,12 @@ public class PassportController extends BaseController{
                                         HttpServletResponse response) {
 
     }
+
+    private String buildActiveEmailContent(String userName, String nickname, String code) {
+        String activeEmailContent = "亲爱的" + userName + "(" + nickname + "), 您好！<br/>" +
+                "欢迎加入家庭管家系统。我是家庭管家小精灵~<br/>" +
+                "点击<a href='/doActivePassport?code=" + code + "'>立即激活账号</a>";
+
+        return activeEmailContent;
+    }
 }

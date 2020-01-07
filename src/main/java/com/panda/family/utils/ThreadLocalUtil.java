@@ -1,5 +1,6 @@
 package com.panda.family.utils;
 
+import com.panda.family.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,9 +40,20 @@ public class ThreadLocalUtil {
         return cookieMap.get(key);
     }
 
+    public static void setUser(User user) {
+        ThreadLocalObject threadLocalObject = getThreadLocalObject();
+        threadLocalObject.setUser(user);
+    }
+
+    public static User getUser() {
+        ThreadLocalObject threadLocalObject = getThreadLocalObject();
+        return threadLocalObject.getUser();
+    }
+
     @Getter
     @Setter
     public static class ThreadLocalObject {
         private Map<String, Cookie> cookieMap;
+        private User user;
     }
 }

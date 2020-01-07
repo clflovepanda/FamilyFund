@@ -10,7 +10,8 @@ import lombok.ToString;
 public class Family {
     private long id;
     private String familyName;
-    private long creater;
+    private long creator;
+    private String member;
     private int ctime;
     private int utime;
 }
