@@ -14,7 +14,7 @@
         <el-divider></el-divider>
         <template>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="家庭" name="home">
+                <el-tab-pane label="家庭列表" name="home">
                     <el-row style="text-align: right">
                         <el-button type="primary" style="margin-bottom: 15px; margin-right: 20px" @click="showCreateFamily"><i class="el-icon-plus"></i> 添加家庭</el-button>
                     </el-row>
@@ -52,7 +52,7 @@
                     </template>
                 </el-tab-pane>
                 <el-tab-pane label="开销类目" name="category">开销类目</el-tab-pane>
-                <el-tab-pane label="预算" name="budget">预算</el-tab-pane>
+                <el-tab-pane label="预算设置" name="budget">预算</el-tab-pane>
             </el-tabs>
         </template>
         <el-dialog title="创建家庭" :visible.sync="createFamilyDialogVisible">

@@ -1,6 +1,8 @@
 package com.panda.family.service;
 
+import com.panda.family.dao.DeductionDao;
 import com.panda.family.dao.UserDao;
+import com.panda.family.domain.Deduction;
 import com.panda.family.domain.User;
 import com.panda.family.utils.Base64Util;
 import com.panda.family.utils.CommonResult;
@@ -9,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class UserService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    DeductionDao deductionDao;
 
     public User queryUserByUserName(String userName) {
         User user = userDao.queryUserByUserName(userName);
@@ -63,6 +69,28 @@ public class UserService {
             return CommonResult.failedCommonResult("邀请链接格式错误，请重新申请");
         }
         return CommonResult.successCommonResult("成功激活");
+    }
+
+    public CommonResult createDeduction(Deduction deduction) {
+        Deduction temp = deductionDao.queryDeductionByUserIdAndItemName(deduction.getUserId(), deduction.getItemName());
+        if (temp != null) {
+            return CommonResult.failedCommonResult("减免项目重名");
+        }
+        deductionDao.insertDeduction(deduction);
+        return CommonResult.successCommonResult("成功添加减免项");
+    }
+
+    public List<Deduction> queryDeductionListByUserId(long userId) {
+        return deductionDao.queryDeductionByUserId(userId);
+    }
+
+    public CommonResult removeDeduction(long id) {
+        Deduction deduction = deductionDao.queryDeductionById(id);
+        if (deduction == null) {
+            return CommonResult.failedCommonResult("找不到这条记录，请刷新页面后再查看");
+        }
+        deductionDao.removeDeduction(id);
+        return CommonResult.successCommonResult("删除成功");
     }
 
     private String buildActiveEmailContent(String userName, String nickname, String code) {

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.panda.family.dao.DeductionDao">
+
+    <!--<select id="search" resultType="com.panda.family.domain.Family">-->
+        <!--select * from ziwei_msg where `year` = #{year} and `month` = #{month} and `day` = #{day} and `hour` = #{hour} and `sex` = #{sex};-->
+    <!--</select>-->
+    <insert id="insertFamily" parameterType="com.panda.family.domain.Deduction" useGeneratedKeys="true" keyProperty="id">
+        insert into `fund_deduction` (`user_id`, `item_name`, `amount`, `ctime`, `utime`)
+        values(#{userId}, #{itemName}, #{amount}, #{ctime}, #{utime});
+    </insert>
+
+    <delete id="removeDeduction">
+        delete from `fund_deduction` where id = #{id};
+    </delete>
+
+    <select id="queryDeductionByUserId" parameterType="java.lang.Long" resultType="com.panda.family.domain.Family">
+        select * from `fund_deduction` where user_id = #{userId};
+    </select>
+
+    <select id="queryDeductionByUserIdAndItemName">
+        select * from `fund_deduction` where `user_id` = #{userId} and `item_name` = #{itemName};
+    </select>
+
+    <select id="queryDeductionByid">
+        select * from `fund_deduction` where `id` = #{id};
+    </select>
+
+</mapper>

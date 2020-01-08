@@ -1,5 +1,6 @@
 package com.panda.family.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,15 @@ public class BaseController {
         result.put("status", resultStatusEnum.getValue());
         result.put("msg", msg);
         result.put("data", data);
+        response.getWriter().write(result.toJSONString());
+    }
+
+    public void writeJsonObject(HttpServletResponse response, ResultStatusEnum resultStatusEnum, String msg, Object data) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        JSONObject result = new JSONObject();
+        result.put("status", resultStatusEnum.getValue());
+        result.put("msg", msg);
+        result.put("data", JSON.toJSONString(data));
         response.getWriter().write(result.toJSONString());
     }
 
