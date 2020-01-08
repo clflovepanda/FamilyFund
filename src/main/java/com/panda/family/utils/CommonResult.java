@@ -29,6 +29,10 @@ public class CommonResult<T> {
         this.data = data;
     }
 
+    public boolean isSuccess() {
+        return this.type == CommonResultEnum.SUCCESS;
+    }
+
     public static CommonResult successCommonResult() {
         return new CommonResult(CommonResultEnum.SUCCESS);
     }

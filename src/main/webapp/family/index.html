@@ -49,6 +49,10 @@
                                 <span slot="title">个人设置</span>
                             </el-menu-item>
                             <el-menu-item index="3" @click="pageIndex=3">
+                                <i class="el-icon-money"></i>
+                                <span slot="title">预算申请</span>
+                            </el-menu-item>
+                            <el-menu-item index="4" @click="pageIndex=4">
                                 <i class="el-icon-setting"></i>
                                 <span slot="title">系统设置</span>
                             </el-menu-item>
@@ -69,11 +73,10 @@
         data: {
             isCollapse: true,
             pageIndex: 0,
-            pageUrls: ["/family/dashboard.html", '/family/home.html', '/family/user.html', '/family/setting.html'],
+            pageUrls: ["/family/dashboard.html", '/family/home.html', '/family/user.html', '/family/apply.html','/family/setting.html'],
         },
         computed: {
             editPage: function () {
-                console.log("=========");
                 return this.pageIndex;
             }
         },

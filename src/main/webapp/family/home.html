@@ -135,7 +135,19 @@
                 this.editFamilyForm.member.splice(this.editFamilyForm.member.indexOf(tag), 1);
             },
             createFamily: function() {
-                alert("提交");
+                axios.post("/family/createFamily", {
+                    familyName: this.createFamilyForm.name
+                }).then(function (value) {
+                    var result = value.data;
+                    if (result.status == 1) {
+                        k.$message({
+                            message: result.msg,
+                            type: 'success'
+                        });
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
             },
             editFamily: function() {
                 alert("修改");

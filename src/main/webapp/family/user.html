@@ -3,8 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
 </head>
 <body>
-user
+    <div id="app">
+        <el-page-header @back="goBack" content="个人设置"></el-page-header>
+        <el-divider></el-divider>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: center">
+                    用户名：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: left; margin-left: 10px">
+                    {{user.userName}}
+                </div>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: center">
+                    昵称：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <el-input v-model="user.nickname" placeholder="请输入昵称" ></el-input>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: center">
+                    密码：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: left">
+                    ******** <el-button size="mini" style="margin-left: 20px" round>修改密码</el-button>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: center">
+                    邮箱：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <el-input v-model="user.email" placeholder="请输入邮箱"></el-input>
+            </el-col>
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 40px; text-align: left">
+                    <span v-if="user.status == 0" style="margin-left: 20px"><el-tag type="danger">未激活</el-tag><el-button size="mini" style="margin-left: 15px" round @click="sendActiveEmail" :disabled="sendActiveBtnDisable">发送激活邮件</el-button></span>
+                    <span v-if="user.status == 1" style="margin-left: 20px"><el-tag type="success">已激活</el-tag></span>
+                </div>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                    税后收入（单位：元）：
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <el-input v-model="user.income" placeholder="税后收入"></el-input>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="6">
+                <div class="grid-content bg-purple" style="line-height: 50px; text-align: center">
+                    税后真实收入（单位：元）：
+                    <el-tooltip class="item" effect="dark" placement="top">
+                        <div slot="content">税后真实收入 = 税后收入 - 减免<br/>减免信息点击页面下方“配置减免”按钮进行配置</div>
+                        <i class="el-icon-question" ></i>
+                    </el-tooltip>
+                </div>
+            </el-col>
+            <el-col :span="6" >
+                <div class="grid-content bg-purple" style="line-height: 50px; text-align: left; padding: 0px 0px 0px 10px">
+                    {{user.realIncome}}
+                </div>
+            </el-col>
+        </el-row>
+        <el-row style="border-bottom: 1px solid lightgrey; padding: 20px 0px 20px 0px;">
+            <el-col :span="12" style="text-align: center">
+                <el-button type="success" style="width: 80%" @click="editUserInfo">保存信息</el-button>
+            </el-col>
+            <el-col :span="3" style="text-align: center">
+                <el-button type="primary" style="width: 80%">配置减免</el-button>
+            </el-col>
+        </el-row>
+    </div>
 </body>
+<script>
+    var k = new Vue({
+        el: '#app',
+        data: {
+            user: {},
+            sendActiveBtnDisable: false
+        },
+        methods: {
+            goBack() {
+                window.parent.k.jumpPage();
+            },
+            editUserInfo: function () {
+                axios.post("/family/editUserInfo", {
+                    userName: this.user.userName,
+                    nickname: this.user.nickname,
+                    email: this.user.email,
+                    income: this.user.income,
+                    realIncome: this.user.realIncome
+                }).then(function (value) {
+                    var result = value.data
+                    if (result.status == 1) {
+                        k.$message({
+                            message: result.msg,
+                            type: 'success'
+                        });
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
+            },
+            sendActiveEmail: function () {
+                this.sendActiveBtnDisable = true;
+                axios.post("/family/sendActiveEmail").then(function (value) {
+                    var result = value.data;
+                    if (result.status == 1) {
+                        k.$message({
+                            message: result.msg,
+                            type: 'success'
+                        });
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
+            }
+        },
+        created: function () {
+            axios.get("/family/getUserInfo").then(function (value) {
+                var result = value.data;
+                if (result.status == 1) {
+                    k.user = JSON.parse(result.data);
+                } else {
+                    k.$message.error(result.msg);
+                }
+            });
+        }
+    });
+</script>
 </html>

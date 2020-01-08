@@ -41,10 +41,19 @@ public class RegExpUtil {
         String regex = "[A-Za-z0-9]{4,18}";
         return match(regex, str);
     }
+    public static boolean isNickname(String str) {
+        if (str == null) return false;
+        String regex = "[A-Za-z0-9\u4e00-\u9fa5]{1,18}";
+        return match(regex, str);
+    }
     public static boolean isFamilyName(String str) {
         if (str == null) return false;
-        String regex = "[A-Za-z0-9]{4,18}";
+        String regex = "[A-Za-z0-9\u4e00-\u9fa5]{4,18}";
         return match(regex, str);
+    }
+    public static boolean isIncome(String income) {
+        String regex = "^[0-9]+(.[0-9]{1,2})?$";
+        return match(regex, income);
     }
     /**
      * 验证输入密码长度 (6-18位)

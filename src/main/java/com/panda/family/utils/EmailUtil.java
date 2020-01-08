@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 public class EmailUtil {
 
     public static boolean checkEmailFormat(String email) {
+        if (email == null) return false;
         String checkReg = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         Pattern regex = Pattern.compile(checkReg);
         Matcher matcher = regex.matcher(email);
@@ -62,7 +63,7 @@ public class EmailUtil {
         return true;
     }
 
-    public static class MailThread implements Runnable {
+    public static class MailThread extends Thread {
 
         private String to;
         private String subject;
@@ -82,7 +83,7 @@ public class EmailUtil {
 
     public static void sendMail(String to, String subject, String content) {
         MailThread mailThread = new MailThread(to, subject, content);
-        mailThread.run();
+        mailThread.start();
     }
 
     public static void main(String[] args) {

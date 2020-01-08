@@ -133,9 +133,17 @@
                     email: this.email
                 }).then(function (value) {
                     var result = value.data;
-                    alert(result.msg);
                     if (result.status == 1) {
-                        location.href = "/login.html";
+                        k.$message({
+                            message: result.msg,
+                            type: 'success'
+                        });
+                        k.$alert('激活邮件已发送到您的注册邮箱，请前往激活！未激活状态仅部分功能可用！', '账号激活', {
+                            confirmButtonText: '确定',
+                            callback: function () {
+                                location.href = "/login.html";
+                            }
+                        });
                     }
                 });
             },

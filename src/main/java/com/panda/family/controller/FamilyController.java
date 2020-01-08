@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.panda.family.domain.Family;
 import com.panda.family.service.FamilyService;
-import com.panda.family.utils.RegExpUtil;
-import com.panda.family.utils.ThreadLocalUtil;
-import com.panda.family.utils.TimeUtil;
+import com.panda.family.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +41,14 @@ public class FamilyController extends BaseController {
         family.setCtime(TimeUtil.getNow());
         family.setUtime(TimeUtil.getNow());
 
-        familyService.createFamily(family);
+        CommonResult result = familyService.createFamily(family);
+        if (result.isSuccess()) {
+            writeJson(response, ResultStatusEnum.SUCCESS, "家庭创建成功", null);
+            return;
+        } else {
+            writeJson(response, ResultStatusEnum.FAILED, result.getMsg(), null);
+            return;
+        }
+
     }
 }

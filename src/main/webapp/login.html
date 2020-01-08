@@ -40,7 +40,7 @@
                 </div>
             </el-col>
             <el-col :span="6" >
-                <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
+                <el-input placeholder="请输入密码" v-model="password" @keyup.enter.native="login" show-password></el-input>
             </el-col>
         </el-row>
         <el-row style="padding: 20px 0px 20px 0px;">

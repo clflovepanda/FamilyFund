@@ -14,6 +14,14 @@
         values(#{userName}, #{nickname}, #{password}, #{income}, #{realIncome}, #{email}, #{status}, #{code}, #{codeTime}, #{ctime}, #{utime});
     </insert>
 
+    <update id="updateStatus">
+        update `fund_user` set `status` = #{status} where user_name = #{userName} and `status` = #{fromStatus};
+    </update>
+
+    <update id="updateUserNormalInfo">
+        update `fund_user` set `nickname` = #{nickname}, `email` = #{email}, `income` = #{income} where `user_name` = #{userName};
+    </update>
+
     <select id="queryUserById" parameterType="java.lang.Long" resultType="com.panda.family.domain.User">
         select * from `fund_user` where id = #{id};
     </select>

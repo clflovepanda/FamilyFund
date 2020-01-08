@@ -26,4 +26,9 @@ public class BaseController {
         result.put("data", data);
         response.getWriter().write(result.toJSONString());
     }
+
+    public void writeString(HttpServletResponse response, String data) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(data);
+    }
 }
