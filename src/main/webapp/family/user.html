@@ -126,7 +126,7 @@
                     <el-table-column
                             label="操作">
                         <template slot-scope="scope">
-                            <el-button type="text" size="small">删除</el-button>
+                            <el-button type="text" size="small" @click="removeDeduction(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -134,12 +134,12 @@
         </el-drawer>
 
         <el-dialog title="新增减免项" :visible.sync="newDeductionDialog">
-            <el-form :model="newDedeuction">
+            <el-form :model="newDeduction">
                 <el-form-item label="减免项目" label-width="120px">
-                    <el-input v-model="newDedeuction.itemName" autocomplete="off"></el-input>
+                    <el-input v-model="newDeduction.itemName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="减免金额" label-width="120px">
-                    <el-input v-model="newDedeuction.amount" autocomplete="off"></el-input>
+                    <el-input v-model="newDeduction.amount" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -158,7 +158,7 @@
             newDeductionDialog: false,
             drawer: false,
             deductionTable: [],
-            newDedeuction: {},
+            newDeduction: {},
         },
         methods: {
             goBack() {
@@ -166,8 +166,37 @@
             },
             createDeduction: function() {
                 axios.post("/family/createDeduction", {
-                    itemName: newDedeuction.itemName,
-                    amount: newDedeuction.amount
+                    itemName: this.newDeduction.itemName,
+                    amount: this.newDeduction.amount
+                }).then(function (value) {
+                    var result = value.data
+                    if (result.status == 1) {
+                        k.$message({
+                            message: result.msg,
+                            type: 'success'
+                        });
+                        k.newDeductionDialog = false;
+                        k.refreshDeduction();
+                        k.refreshUserInfo();
+                        k.newDeduction = {};
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
+            },
+            removeDeduction: function(row) {
+                axios.post("/family/removeDeduction", row).then(function (value) {
+                    var result = value.data;
+                    if (result.status == 1) {
+                        k.$message({
+                            message: result.msg,
+                            type: 'success'
+                        });
+                        k.refreshDeduction();
+                        k.refreshUserInfo();
+                    } else {
+                        k.$message.error(result.msg);
+                    }
                 });
             },
             editUserInfo: function () {
@@ -184,6 +213,7 @@
                             message: result.msg,
                             type: 'success'
                         });
+                        k.refreshUserInfo();
                     } else {
                         k.$message.error(result.msg);
                     }
@@ -202,25 +232,31 @@
                         k.$message.error(result.msg);
                     }
                 });
+            },
+            refreshDeduction: function () {
+                axios.get("/family/queryDeductionList").then(function (value) {
+                    var result = value.data;
+                    if (result.status == 1) {
+                        k.deductionTable = JSON.parse(result.data);
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
+            },
+            refreshUserInfo: function () {
+                axios.get("/family/getUserInfo").then(function (value) {
+                    var result = value.data;
+                    if (result.status == 1) {
+                        k.user = JSON.parse(result.data);
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
             }
         },
         created: function () {
-            axios.get("/family/getUserInfo").then(function (value) {
-                var result = value.data;
-                if (result.status == 1) {
-                    k.user = JSON.parse(result.data);
-                } else {
-                    k.$message.error(result.msg);
-                }
-            });
-            axios.get("/family/queryDeductionList").then(function (value) {
-                var result = value.data;
-                if (result.status == 1) {
-                    k.deductionTable = JSON.parse(result.data);
-                } else {
-                    k.$message.error(result.msg);
-                }
-            });
+            this.refreshUserInfo();
+            this.refreshDeduction();
         }
     });
 </script>

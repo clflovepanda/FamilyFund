@@ -22,6 +22,10 @@
         update `fund_user` set `nickname` = #{nickname}, `email` = #{email}, `income` = #{income} where `user_name` = #{userName};
     </update>
 
+    <update id="updateUserRealIncome">
+        update `fund_user` set `real_income` = #{realIncome} where `user_name` = #{userName};
+    </update>
+
     <select id="queryUserById" parameterType="java.lang.Long" resultType="com.panda.family.domain.User">
         select * from `fund_user` where id = #{id};
     </select>

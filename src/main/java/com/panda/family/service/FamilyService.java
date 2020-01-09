@@ -10,6 +10,8 @@ import com.panda.family.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FamilyService {
 
@@ -54,6 +56,12 @@ public class FamilyService {
         String inviteMailContent = buildInviteMail(fromUser.getUserName(), fromUser.getNickname(), toUser.getUserName(), toUser.getNickname(), family.getFamilyName());
         EmailUtil.sendMail(toUser.getEmail(), "家庭成员邀请", inviteMailContent);
         return CommonResult.successCommonResult("邀请成功，需要等待对方确认");
+    }
+
+    public List<Family> getFamilyList() {
+        User user = ThreadLocalUtil.getUser();
+        List<Family> familyList = familyDao.queryFamilyByCreatorId(user.getId());
+        return familyList;
     }
 
     private String buildInviteMail(String fromUserName, String fromUserNickname, String toUserName, String toUserNickname, String familyName) {

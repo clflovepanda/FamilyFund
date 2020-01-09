@@ -9,6 +9,8 @@ public interface UserDao {
 
     void updateUserNormalInfo(User user);
 
+    void updateUserRealIncome(User user);
+
     User queryUserById(@Param("id") long id);
 
     User queryUserByUserName(@Param("userName") String userName);

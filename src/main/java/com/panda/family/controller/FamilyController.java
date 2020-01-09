@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/family")
@@ -49,6 +51,12 @@ public class FamilyController extends BaseController {
             writeJson(response, ResultStatusEnum.FAILED, result.getMsg(), null);
             return;
         }
+    }
 
+    @RequestMapping(path = "/getFamilyList", method = RequestMethod.GET)
+    public void getFamilyList(HttpServletRequest request,
+                              HttpServletResponse response) throws IOException {
+        List<Family> familyList = familyService.getFamilyList();
+        writeJsonObject(response, ResultStatusEnum.SUCCESS, "查询成功", familyList);
     }
 }

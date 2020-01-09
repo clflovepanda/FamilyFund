@@ -25,7 +25,7 @@
         select * from `fund_family` where creator = #{creatorId};
     </select>
 
-    <select id="queryFamilyByCreatorIdAndFamilyName">
+    <select id="queryFamilyByCreatorIdAndFamilyName" resultType="com.panda.family.domain.Family">
         select * from `fund_family` where creator = #{creatorId} and `family_name` = #{familyName};
     </select>
 </mapper>

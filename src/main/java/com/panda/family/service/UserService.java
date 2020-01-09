@@ -7,10 +7,13 @@ import com.panda.family.domain.User;
 import com.panda.family.utils.Base64Util;
 import com.panda.family.utils.CommonResult;
 import com.panda.family.utils.EmailUtil;
+import com.panda.family.utils.ThreadLocalUtil;
+import org.apache.commons.validator.routines.DoubleValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Service
@@ -18,9 +21,10 @@ public class UserService {
 
     @Autowired
     UserDao userDao;
-
     @Autowired
     DeductionDao deductionDao;
+
+    private DecimalFormat df = new DecimalFormat("#.00");
 
     public User queryUserByUserName(String userName) {
         User user = userDao.queryUserByUserName(userName);
@@ -35,6 +39,7 @@ public class UserService {
 
     public CommonResult updateUser(User oldUser, User user) {
         userDao.updateUserNormalInfo(user);
+        computedUserRealIncome();
         if (!oldUser.getEmail().equals(user.getEmail())) {//邮箱不同，证明修改邮箱，需要重新激活
             userDao.updateStatus(user.getUserName(), 0, 1);
             sendActiveEmail(user);
@@ -77,6 +82,7 @@ public class UserService {
             return CommonResult.failedCommonResult("减免项目重名");
         }
         deductionDao.insertDeduction(deduction);
+        computedUserRealIncome();
         return CommonResult.successCommonResult("成功添加减免项");
     }
 
@@ -90,7 +96,20 @@ public class UserService {
             return CommonResult.failedCommonResult("找不到这条记录，请刷新页面后再查看");
         }
         deductionDao.removeDeduction(id);
+        computedUserRealIncome();
         return CommonResult.successCommonResult("删除成功");
+    }
+
+    private void computedUserRealIncome() {
+        User user = ThreadLocalUtil.getUser();
+        List<Deduction> deductions = deductionDao.queryDeductionByUserId(user.getId());
+        double realIncome = user.getIncome();
+        for (Deduction deduction : deductions) {
+            realIncome -= deduction.getAmount();
+        }
+        realIncome = Double.parseDouble(df.format(realIncome));
+        user.setRealIncome(realIncome);
+        userDao.updateUserRealIncome(user);
     }
 
     private String buildActiveEmailContent(String userName, String nickname, String code) {

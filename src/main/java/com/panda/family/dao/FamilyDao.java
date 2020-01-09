@@ -11,6 +11,8 @@ public interface FamilyDao {
 
     void updateFamily(Family family);
 
+    void removeFamily(long familyId);
+
     Family queryFamilyById(@Param("id") long id);
 
     Family queryFamilyByCreatorIdAndFamilyName(@Param("creatorId") long creatorId, @Param("familyName") String familyName);

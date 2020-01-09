@@ -25,24 +25,14 @@
                                 style="width: 100%">
                             <el-table-column
                                     prop="id"
-                                    label="ID"
-                                    width="100">
+                                    label="ID">
                             </el-table-column>
                             <el-table-column
-                                    prop="name"
+                                    prop="familyName"
                                     label="家庭名称">
                             </el-table-column>
                             <el-table-column
-                                    prop="creator"
-                                    label="创建者">
-                            </el-table-column>
-                            <el-table-column
-                                    prop="ctime"
-                                    label="创建时间">
-                            </el-table-column>
-                            <el-table-column
-                                    label="操作"
-                                    width="150">
+                                    label="操作">
                                 <template slot-scope="scope">
                                     <el-button type="text" size="small" @click="invite(scope.row)">邀请</el-button>
                                     <el-button type="text" size="small" @click="showEditFamilyDialog(scope.row)">编辑</el-button>
@@ -113,12 +103,10 @@
                 id: '1',
                 name: '我的小窝',
                 creator: 'panda',
-                ctime: '2020年',
             }, {
                 id: '1',
                 name: '我的小窝',
                 creator: 'panda',
-                ctime: '2020年',
             }]
         },
         methods: {
@@ -144,6 +132,8 @@
                             message: result.msg,
                             type: 'success'
                         });
+                        k.createFamilyDialogVisible = false;
+                        k.refreshFamily();
                     } else {
                         k.$message.error(result.msg);
                     }
@@ -154,8 +144,20 @@
             },
             goBack() {
                 window.parent.k.jumpPage();
+            },
+            refreshFamily: function () {
+                axios.get("/family/getFamilyList").then(function (value) {
+                    var result = value.data;
+                    if (result.status == 1) {
+                        k.familyData = JSON.parse(result.data);
+                    } else {
+                        k.$message.error(result.msg);
+                    }
+                });
             }
-
+        },
+        created: function () {
+            this.refreshFamily();
         }
     });
 </script>
